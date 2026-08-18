@@ -110,8 +110,6 @@
    
 </template>
 <script setup lang="ts">
-import ReservationDialog from '~/components/reservationDialog.vue';
-
 
 const { getById } = useDog();
 const { orderItem, add } = useOrder()
@@ -122,6 +120,7 @@ const id = route.params.id
 const dogs = await getById(id as string)
 
 const dialogReserved = ref(false)
+const confirmationData = useState<any>("confirmationPage")
 
 async function submitReserved(){
 try {
@@ -129,7 +128,12 @@ try {
        ...orderItem.value,
             dogId: dogs._id!
     })
+     confirmationData.value = {
+            ...orderItem.value,
+            dog: dogs
+        }
     dialogReserved.value =false
+      await navigateTo("/confirmationPage")
     
 } catch (error) {
  console.error(error)
