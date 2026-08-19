@@ -103,6 +103,7 @@
                 :dogItem="dogs"
                 @submit:confirm="submitReserved()"
                 @cancel="dialogReserved = false"
+                :loading="loading"
             />
         </v-dialog>
 
@@ -113,6 +114,7 @@
 
 const { getById } = useDog();
 const { orderItem, add } = useOrder()
+const loading = ref(false)
 
 const route = useRoute();
 const id = route.params.id
@@ -124,6 +126,7 @@ const confirmationData = useState<any>("confirmationPage")
 
 async function submitReserved(){
 try {
+    loading.value = true;
     await add({
        ...orderItem.value,
             dogId: dogs._id!
@@ -137,6 +140,8 @@ try {
     
 } catch (error) {
  console.error(error)
+}finally{
+    loading.value = false
 }
 }
 
